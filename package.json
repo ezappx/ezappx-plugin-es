@@ -1,8 +1,8 @@
 {
-  "name": "ezappx-plugin-template",
-  "version": "0.0.1",
-  "description": "ezappx-plugin-template",
-  "main": "dist/ezappx-plugin-template.min.js",
+  "name": "ezappx-plugin-ajaxdemo",
+  "version": "0.0.2",
+  "description": "ezappx-plugin-ajaxdemo",
+  "main": "dist/ezappx-plugin-ajaxdemo.min.js",
   "scripts": {
     "lint": "eslint src",
     "v:patch": "npm version --no-git-tag-version patch",
