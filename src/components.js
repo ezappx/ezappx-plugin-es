@@ -18,7 +18,7 @@ export default (editor, config = {}) => {
           type: 'content',
           label: 'Text',
           name: 'text',
-        } , {
+        }, {
           type: 'text',
           label: 'Id',
           name: 'id',
@@ -34,7 +34,7 @@ export default (editor, config = {}) => {
   var defaultConentModel = defaultConentType.model;
   var defaultConentView = defaultConentType.view;
 
-  // form button
+  // ajax button
   domc.addType('ajax-button',
     {
       model: defaultConentModel.extend(
@@ -44,7 +44,6 @@ export default (editor, config = {}) => {
 
             script: function () {
               $(this).click(function (e) {
-                var t = $(e.target).attr("target-div")
                 console.log($(e.target).attr("request-type") + " " + $(e.target).attr("target-url"));
                 $.ajax({
                   url: $(e.target).attr("target-url"),
@@ -111,4 +110,57 @@ export default (editor, config = {}) => {
         },
       })
     });
+
+  // push service
+  domc.addType('push-service', {
+    // Define the Model
+    model: defaultModel.extend({
+      defaults: {
+        ...defaultModel.prototype.defaults,
+        traits: [
+          'Server',
+          'Channel',
+        ],
+        script: function () {
+          console.log(this);
+          var displayList = $(this);
+          var server = displayList.attr('Server'); // http://push.ezappx.com/gs-guide-websocket
+          var channel = displayList.attr('Channel'); // /topic/greetings
+          var socket = new SockJS(server);
+          stompClient = Stomp.over(socket);
+          stompClient.connect({ "Origin": "test" }, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe(channel, function (receivedMsg) {
+              var notificationFull = app.notification.create({
+                icon: '<i class="icon demo-icon"></i>',
+                title: 'Ezappx',
+                titleRightText: 'now',
+                subtitle: 'Received msg: ' + JSON.parse(receivedMsg.body).content,
+                text: 'created at (' +JSON.parse(receivedMsg.body).createAt + ')',
+                closeTimeout: 3000,
+              });
+              notificationFull.open();
+            });
+          });
+        }
+      },
+    },
+      {
+        isComponent: function (el) {
+          if ($(el).attr(EZAPPX_COMPONENT_TYPE) == 'push-service') {
+            return { type: 'push-service' };
+          }
+        },
+      }),
+
+    // Define the View
+    view: defaultType.view.extend({
+      init() {
+        this.model.setAttributes({
+          'Server': 'http://push.ezappx.com/gs-guide-websocket',
+          'Channel': '/topic/greetings'
+        });
+      }
+    }),
+  });
 }
