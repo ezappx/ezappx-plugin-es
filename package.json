@@ -1,6 +1,6 @@
 {
   "name": "ezappx-plugin-ajaxdemo",
-  "version": "0.0.8",
+  "version": "0.0.11",
   "description": "ezappx-plugin-ajaxdemo",
   "main": "dist/ezappx-plugin-ajaxdemo.min.js",
   "scripts": {
