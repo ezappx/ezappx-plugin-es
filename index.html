@@ -3,17 +3,17 @@
 
 <head>
   <meta charset='utf-8'>
-  <title>ezappx-plugin-ajaxdemo</title>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/grapesjs@0.14.33/dist/css/grapes.min.css'>
+  <title>ezappx-plugin-es</title>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/grapesjs@0.14.40/dist/css/grapes.min.css'>
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css'>
 
-  <script src='https://cdn.jsdelivr.net/npm/grapesjs@0.14.33/dist/grapes.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/grapesjs@0.14.40/dist/grapes.min.js"></script>
   <script src='https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js'></script>
   <script src='https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js'></script>
-  <script src='https://unpkg.com/ezappx-plugin-toolbar'></script>
-  <script src='https://unpkg.com/ezappx-plugin-f7'></script>
-  <script src='dist/ezappx-plugin-ajaxdemo.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/ezappx-plugin-toolbar/dist/ezappx-plugin-toolbar.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ezappx-plugin-f7/dist/ezappx-plugin-f7.min.js"></script>
+  <script src='dist/ezappx-plugin-es.min.js'></script>
   <style>
     body,html {
         height: 100%;
@@ -72,7 +72,7 @@
       plugins: [
         'ezappx-plugin-toolbar',
         'ezappx-plugin-f7',
-        'ezappx-plugin-ajaxdemo',
+        'ezappx-plugin-es',
       ],
 
       pluginsOpts: {
@@ -85,7 +85,7 @@
           displayAboutId: '#display-about',
         },
 
-        'ezappx-plugin-ajaxdemo': {
+        'ezappx-plugin-es': {
           foo: 'bar'
         }
       },
@@ -97,13 +97,21 @@
         scripts: [
           'https://cdn.jsdelivr.net/npm/framework7@3.4.2/js/framework7.min.js',
           'https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js',
-          'https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js',
+          'https://cdn.jsdelivr.net/npm/sockjs-client@1.3.0/dist/sockjs.min.js',
           'https://cdn.jsdelivr.net/npm/stomp-websocket@2.3.4-next/lib/stomp.min.js'],
       },
 
       deviceManager: {
         devices: [],
-      }
+      },
+
+      storageManager: {
+        id: 'gjs-',             // Prefix identifier that will be used on parameters
+        type: 'local',          // Type of the storage
+        autosave: true,         // Store data automatically
+        autoload: true,         // Autoload stored data on init
+        stepsBeforeSave: 1,     // If autosave enabled, indicates how many changes are necessary before store method is triggered
+      },
     });
     editor.runCommand('set-device-android');
     window.editor = editor;

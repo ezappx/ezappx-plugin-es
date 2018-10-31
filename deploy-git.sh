@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # build plugin
-echo "compile ezappx-plugin-ajaxdemo..."
+echo "compile ezappx-plugin-es..."
 npm run build
 
 # deploy to git server

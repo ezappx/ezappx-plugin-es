@@ -149,9 +149,15 @@ export default (editor, config = {}) => {
 
       defaults: {
         ...defaultModel.prototype.defaults,
-        traits: [
-          'server', //FIXME 监听变量需要设置 changeProp=1
-          'channel',
+        traits: [{
+          type: 'js-trait',
+          label: 'Server',
+          name: 'server'
+        }, {
+          type: 'js-trait',
+          label: 'Channel',
+          name: 'channel'
+        },
         ],
         script: function () {
           var displayList = $(this);
@@ -255,6 +261,48 @@ export default (editor, config = {}) => {
         isComponent: function (el) {
           if ($(el).attr(EZAPPX_COMPONENT_TYPE) == 'es-tencent-map') {
             return { type: 'es-tencent-map' };
+          }
+        },
+      }),
+
+    // Define the View
+    view: defaultType.view,
+  });
+
+  // cordova dialogs
+  domc.addType('cordova-dialogs-alert', {
+    model: defaultModel.extend({
+      init() { 
+        console.log("set default attrs on cordova-dialogs-alert")      
+        this.setAttributes({
+          'server': 'http://push.ezappx.com/gs-guide-websocket',
+          'channel': '/topic/greetings'
+        });
+      },
+
+      defaults: {
+        ...defaultModel.prototype.defaults,
+        traits: [{
+          type: 'js-trait',
+          label: 'Server',
+          name: 'server'
+        }, 
+        {
+          type: 'js-trait',
+          label: 'Channel',
+          name: 'channel'
+        }, 
+        ],
+        script: function () {
+          console.log("server:", $(this).attr("server"));
+          console.log("channel:", $(this).attr("channel"));
+        }
+      },
+    },
+      {
+        isComponent: function (el) {
+          if ($(el).attr(EZAPPX_COMPONENT_TYPE) == 'cordova-dialogs-alert') {
+            return { type: 'cordova-dialogs-alert' };
           }
         },
       }),

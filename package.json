@@ -1,8 +1,8 @@
 {
-  "name": "ezappx-plugin-ajaxdemo",
-  "version": "0.0.11",
-  "description": "ezappx-plugin-ajaxdemo",
-  "main": "dist/ezappx-plugin-ajaxdemo.min.js",
+  "name": "ezappx-plugin-es",
+  "version": "0.0.14",
+  "description": "ezappx-plugin-es",
+  "main": "dist/ezappx-plugin-es.min.js",
   "scripts": {
     "lint": "eslint src",
     "v:patch": "npm version --no-git-tag-version patch",
@@ -14,12 +14,11 @@
     "url": ""
   },
   "keywords": [
-    "grapesjs",
+    "ezappx",
     "plugin",
-    "boilerplate",
-    "wysiwyg"
+    "es"
   ],
-  "author": "Artur Arseniev",
+  "author": "ingbyr",
   "license": "BSD-3-Clause",
   "babel": {
     "presets": [
