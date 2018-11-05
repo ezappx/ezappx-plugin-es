@@ -1,13 +1,13 @@
 {
   "name": "ezappx-plugin-es",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "description": "ezappx-plugin-es",
   "main": "dist/ezappx-plugin-es.min.js",
   "scripts": {
     "lint": "eslint src",
     "v:patch": "npm version --no-git-tag-version patch",
     "build": "npm run v:patch && webpack --env.production",
-    "start": "webpack-dev-server --open --progress --colors"
+    "start": "webpack-dev-server --open --progress --colors --port 9080"
   },
   "repository": {
     "type": "git",

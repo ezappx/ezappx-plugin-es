@@ -6,6 +6,7 @@ export default (editor, config = {}) => {
   const bm = editor.BlockManager;
   const CATEGORY_EXTERNAL_SERVICE = "External Service";
   const CATEGORY_CORDOVA_PLUGIN = "Cordova Plugin";
+
   bm.add('es-ajax', {
     label: 'Ajax',
     attributes: { class: 'fa fa-cloud' },
@@ -14,20 +15,6 @@ export default (editor, config = {}) => {
             <button ${EZAPPX_COMPONENT_TYPE}='es-ajax'>Button</button>
             `
   });
-
-  bm.add('es-push-service', {
-    label: 'Push Service',
-    attributes: { class: 'fa fa-bell' },
-    category: CATEGORY_EXTERNAL_SERVICE,
-    content: {
-      type: 'es-push-service',
-      // 可视化js块
-      style: {
-        width: '100%',
-        height: '50px',
-      }
-    }
-  })
 
   bm.add('es-tencent-map', {
     label: 'Tencent Map',
@@ -43,13 +30,13 @@ export default (editor, config = {}) => {
     }
   })
 
-  // cordova plugin add cordova-plugin-dialogs
-  bm.add('cordova-dialogs-alert', {
-    label: 'Alert',
+  // push service and display notification
+  bm.add('cordova-push-service-notification', {
+    label: 'Push Service',
     attributes: { class: 'fa fa-bell' },
     category: CATEGORY_CORDOVA_PLUGIN,
     content: {
-      type: 'cordova-dialogs-alert',
+      type: 'cordova-push-service-notification',
       // 可视化js块
       style: {
         width: '100%',

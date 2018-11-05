@@ -130,74 +130,6 @@ export default (editor, config = {}) => {
       view: defaultConentView
     });
 
-  // TODO实现一种Trait，值改变后移除comp重新添加
-  // push service
-  domc.addType('es-push-service', {
-    model: defaultModel.extend({
-      init() {
-        console.log('model', this);
-        this.listenTo(this, 'change:server', this.changeServer);
-        this.setAttributes({
-          'server': 'http://push.ezappx.com/gs-guide-websocket',
-          'channel': '/topic/greetings'
-        });
-      },
-
-      changeServer() {
-        console.log('change to', this.get('server'));
-      },
-
-      defaults: {
-        ...defaultModel.prototype.defaults,
-        traits: [{
-          type: 'js-trait',
-          label: 'Server',
-          name: 'server'
-        }, {
-          type: 'js-trait',
-          label: 'Channel',
-          name: 'channel'
-        },
-        ],
-        script: function () {
-          var displayList = $(this);
-          var server = displayList.attr('server'); // http://push.ezappx.com/gs-guide-websocket
-          var channel = displayList.attr('channel'); // /topic/greetings
-          var socket = new SockJS(server);
-          stompClient = Stomp.over(socket);
-          stompClient.connect({ "Origin": "test" }, function (frame) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe(channel, function (receivedMsg) {
-              var notificationFull = app.notification.create({
-                icon: '<i class="icon demo-icon"></i>',
-                title: 'Ezappx',
-                titleRightText: 'now',
-                subtitle: 'Received msg: ' + JSON.parse(receivedMsg.body).content,
-                text: 'This message was created at (' + JSON.parse(receivedMsg.body).createAt + ')',
-                closeTimeout: 3000,
-              });
-              notificationFull.open();
-            });
-          });
-        }
-      },
-    },
-      {
-        isComponent: function (el) {
-          if ($(el).attr(EZAPPX_COMPONENT_TYPE) == 'es-push-service') {
-            return { type: 'es-push-service' };
-          }
-        },
-      }),
-
-    // Define the View
-    view: defaultType.view.extend({
-      init() {
-        console.log('view', this);
-      }
-    }),
-  });
-
   // tencent map
   domc.addType('es-tencent-map', {
     model: defaultModel.extend({
@@ -270,10 +202,10 @@ export default (editor, config = {}) => {
   });
 
   // cordova dialogs
-  domc.addType('cordova-dialogs-alert', {
+  domc.addType('cordova-push-service-notification', {
     model: defaultModel.extend({
-      init() { 
-        console.log("set default attrs on cordova-dialogs-alert")      
+      init() {
+        console.log("set default attrs on cordova-dialogs-alert")
         this.setAttributes({
           'server': 'http://push.ezappx.com/gs-guide-websocket',
           'channel': '/topic/greetings'
@@ -282,27 +214,46 @@ export default (editor, config = {}) => {
 
       defaults: {
         ...defaultModel.prototype.defaults,
-        traits: [{
-          type: 'js-trait',
-          label: 'Server',
-          name: 'server'
-        }, 
-        {
-          type: 'js-trait',
-          label: 'Channel',
-          name: 'channel'
-        }, 
+        traits: [
+          'server',
+          'channel',
         ],
         script: function () {
-          console.log("server:", $(this).attr("server"));
-          console.log("channel:", $(this).attr("channel"));
+          var displayList = $(this);
+          var server = displayList.attr('server');
+          var channel = displayList.attr('channel');
+          var socket = new SockJS(server);
+          stompClient = Stomp.over(socket);
+          stompClient.connect({ "Origin": "test" }, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe(channel, function (receivedMsg) {
+              if (typeof cordova == 'undefined') {
+                //在非真实设备上使用framwork7的notification代替，以供前端预览效果
+                var notificationFull = app.notification.create({
+                  icon: '<i class="icon demo-icon"></i>',
+                  title: 'Ezappx Push Service',
+                  titleRightText: 'now',
+                  subtitle: JSON.parse(receivedMsg.body).content,
+                  closeTimeout: 3000,
+                });
+                notificationFull.open();
+              } else {
+                //真实设备上使用 https://github.com/katzer/cordova-plugin-local-notifications 实现原生方法的通知
+                cordova.plugins.notification.local.schedule({
+                  title: 'Ezappx Push Service',
+                  text: JSON.parse(receivedMsg.body).content,
+                  foreground: true
+                });
+              }
+            });
+          });
         }
       },
     },
       {
         isComponent: function (el) {
-          if ($(el).attr(EZAPPX_COMPONENT_TYPE) == 'cordova-dialogs-alert') {
-            return { type: 'cordova-dialogs-alert' };
+          if ($(el).attr(EZAPPX_COMPONENT_TYPE) == 'cordova-push-service-notification') {
+            return { type: 'cordova-push-service-notification' };
           }
         },
       }),
